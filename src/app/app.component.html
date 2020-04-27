@@ -1,6 +1,6 @@
 <div>
   <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">HotStock</a>
+    <a class="navbar-brand" routerLink="/home">HotStock</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -8,19 +8,19 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
-          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+          <a class="nav-link" routerLink="/home">Home <span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Stock Analysis</a>
+          <a class="nav-link" routerLink="/analysis">Stock Analysis</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#" tabindex="-1" aria-disabled="true">Portfolio Construction</a>
+          <a class="nav-link" routerLink="/portfolio">Portfolio Construction</a>
         </li>
       </ul>
       <form class="form-inline my-2 my-lg-0">
         <!-- <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">-->
-        <button class="btn btn-outline-success mr-2 my-sm-0">Login</button>
-        <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Sign Up</button>
+        <button class="btn btn-outline-success mr-2 my-sm-0" data-toggle="modal" data-target="#loginModal">Login</button>
+        <button class="btn btn-outline-info my-2 my-sm-0" data-toggle="modal" data-target="#signUpModal">Sign Up</button>
       </form>
     </div>
   </nav>
@@ -28,9 +28,84 @@
 
 <br>
 <br>
+
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Login</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="email">Email address</label>
+            <input type="email" class="form-control" id="email" aria-describedby="emailHelp">
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <span style="float: right">
+              <a style="text-decoration: darkcyan" href="#" role="button">Forgot password?</a>
+            </span>
+            <input type="password" class="form-control" id="password">
+          </div>
+          <button type="button" class="btn btn-primary btn-lg btn-block">Login</button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <div class="mx-auto" style="width: 300px;">
+          Don't have an account?
+          <a style="text-decoration: darkcyan" href="#" role="button" data-toggle="modal" data-target="#signUpModal" data-dismiss="modal">
+            SignUp
+          </a> instead
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="signUpModal" tabindex="-1" role="dialog" aria-labelledby="signUpModal" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Sign Up</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="emailSignUp">Enter your email</label>
+            <input type="email" class="form-control" id="emailSignUp" aria-describedby="emailHelp">
+          </div>
+          <div class="form-group">
+            <label for="passwordSignUp">Enter Password</label>
+            <input type="password" class="form-control" id="passwordSignUp">
+          </div>
+          <div class="form-group">
+            <label for="conPasswordSignUp">Confirm Password</label>
+            <input type="password" class="form-control" id="conPasswordSignUp">
+          </div>
+          <button type="button" class="btn btn-primary btn-lg btn-block">Create Account</button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <div class="mx-auto" style="width: 300px;">
+          Already have an account?
+          <a style="text-decoration: darkcyan" href="#" role="button" data-toggle="modal" data-target="#loginModal" data-dismiss="modal">
+            Login
+          </a> here
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="container">
   <br>
-
   <form>
     <div class="row">
       <div class="col">
@@ -40,30 +115,37 @@
         <input name="period" type="text" class="form-control" placeholder="Period" [(ngModel)]="request.period">
       </div>
     </div>
-    <br>
-    <button type="button" class="btn btn-dark btn-lg btn-block" (click)="getStockData()">Show stock Data</button>
-
+    <div class="row ml-4 mt-3">
+      <input type="checkbox" class="form-check-input mt-2" id="showActions" name="showActions" [(ngModel)]="request.showActions">
+      <label class="form-check-label" for="showActions">Show Dividends and Splits</label>
+    </div>
+    <button type="button" class="btn btn-dark btn-lg btn-block mt-3" (click)="getStockData()">Show stock Data</button>
     <div class="mx-auto" style="width: 200px">
     </div>
   </form>
 
   <br>
-  <div *ngIf="showData">
-    <table class="table">
-      <tr>
-        <th>Date</th>
-        <th *ngFor="let key of keys">
-          {{ key }}
-        </th>
-      </tr>
-      <tr *ngFor="let date of dates; let i = index">
-        <td>
-          {{ date | date }}
-        </td>
-        <td *ngFor="let key of keys">
-          {{ stockData[key][i] }}
-        </td>
-      </tr>
+  <div *ngIf="stockData">
+    <table class="table table-hover">
+      <thead class="thead-dark">
+        <tr>
+          <th>Date</th>
+          <th *ngFor="let key of keys">
+            {{ key }}
+          </th>
+        </tr>
+      </thead>
+      <tbody class="table-hover ">
+        <tr *ngFor="let date of dates; let i = index">
+          <td>
+            {{ date | date }}
+          </td>
+          <td *ngFor="let key of keys">
+            {{ stockData[key][i] }}
+          </td>
+        </tr>
+      </tbody>
+
     </table>
   </div>
 </div>

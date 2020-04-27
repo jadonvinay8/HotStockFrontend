@@ -11,40 +11,22 @@ export class AppComponent {
 
   request = {
     ticker: '',
-    period: ''
+    period: '',
+    showActions: false
   };
 
-  showData = false;
-  stockData = {};
+  stockData;
   keys = [];
   dates = [];
   constructor(private service: StockDataService) {}
 
-  // getData() {
-  //   this.service.getNums().subscribe(
-  //     data => {
-  //               data = JSON.parse(data);
-  //
-  //               for (const key in data) {
-  //                 if (data.hasOwnProperty(key)) {
-  //                   console.log(key);
-  //                   this.stockData[key] = data[key];
-  //                 }
-  //               }
-  //
-  //               this.keys = Object.keys(this.stockData);
-  //               this.dates = this.stockData[this.keys[0]];
-  //               this.keys = this.keys.filter(key => key !== 'Dates');
-  //               this.showData = true;
-  //
-  //     },
-  //     err => console.log('An error occurred: ' + err)
-  //   );
-  // }
-
   getStockData() {
     this.service.getStockData(this.request).subscribe(
       data => {
+        // added below 2 lines to avoid  the  display of cache results
+        this.stockData = {};
+        this.keys = [];
+
         data = JSON.parse(JSON.stringify(data));
 
         for (const key in data) {
@@ -52,16 +34,12 @@ export class AppComponent {
             this.stockData[key] = data[key];
           }
         }
-
         this.keys = Object.keys(this.stockData);
         this.dates = this.stockData[this.keys[0]];
         this.keys = this.keys.filter(key => key !== 'Dates');
-        this.showData = true;
-
       },
       err => console.log('An error occurred: ' + err)
     );
   }
-
 
 }

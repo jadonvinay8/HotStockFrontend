@@ -15,6 +15,7 @@ export class StockDataService {
   }
 
   getStockData(request): Observable<any> {
+    console.log(request.showActions);
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
